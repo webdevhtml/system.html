@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cashier System</title>
+  <style>
+    body {
+      background-image: url("96.jpg");
+      
+      font-family: Arial, sans-serif;
+      text-align: center;
+    background-color: #f2f2f2;;  
+    }
+
+    h1 {
+      margin-top: 50px;
+      font-size: 100px;
+      color: #333333;
+    }
+
+    .input-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .input-container input {
+      padding: 100px;
+      margin-right: 5px;
+      font-size: 18px;
+    }
+    
+    .input-text {
+        font-size:2000px;
+    }
+
+    .btn {
+      padding: 100px 20px;
+      margin-left: 5px;
+      cursor: pointer;
+      font-siz100 50px;
+      background-color: green;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    #total {
+      font-size: 100px;
+      margin-bottom: 20px;
+      
+    }
+
+    #change {
+      font-size: 100px;
+      margin-bottom: 20px;
+    }
+
+    #receipt {
+      text-align: left;
+      margin: 20px auto;
+      padding: 10px;
+      width: 400px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+    }
+
+    #receipt p {
+      margin: 50px;
+      font-size: 18px;
+    }
+    
+    .div {
+        font-size:60px;
+    }
+  </style>
+</head>
+<body>
+  <h1> Webdev ,Cashier System</h1>
+
+  <div class="input-container">
+    <input type="text" id="itemInput" placeholder="Enter item name">
+    <input type="number" id="priceInput" placeholder="Enter item price">
+    <button class="btn" onclick="addItem()">Add Item</button>
+  </div>
+
+  <div class="input-container">
+    <input type="number" id="discountInput" placeholder="Enter discount percentage">
+    <button class="btn" onclick="applyDiscount()">Apply Discount</button>
+  </div>
+
+  <div id="total">Total: ₱0</div>
+
+  <div class="input-container">
+    <input type="number" id="paymentInput" placeholder="Enter payment amount">
+    <button class="btn" onclick="processPayment()">Process Payment</button>
+  </div>
+
+  <div id="change">Change: ₱0</div>
+
+  <div id="receipt"></div>
+
+  <script>
+    var items = [];
+    var total = 0;
+
+    function addItem() {
+      var itemInput = document.getElementById("itemInput");
+      var priceInput = document.getElementById("priceInput");
+      var itemName = itemInput.value;
+      var itemPrice = parseFloat(priceInput.value);
+
+      if (itemName && !isNaN(itemPrice)) {
+        var item = { name: itemName, price: itemPrice };
+        items.push(item);
+        total += itemPrice;
+        updateTotal();
+        itemInput.value = "";
+        priceInput.value = "";
+      }
+    }
+
+    function applyDiscount() {
+      var discountInput = document.getElementById("discountInput");
+      var discountPercentage = parseFloat(discountInput.value);
+
+      if (!isNaN(discountPercentage)) {
+        var discountAmount = (discountPercentage / 100) * total;
+        total -= discountAmount;
+        updateTotal();
+        discountInput.value = "";
+      }
+    }
+
+    function processPayment() {
+      var paymentInput = document.getElementById("paymentInput");
+      var paymentAmount = parseFloat(paymentInput.value);
+
+      if (!isNaN(paymentAmount)) {
+        var change = paymentAmount - total;
+        var changeElement = document.getElementById("change");
+        changeElement.textContent = "Change: ₱" + change.toFixed(2);
+        paymentInput.value = "";
+
+        displayReceipt();
+      }
+    }
+
+    function updateTotal() {
+      var totalElement = document.getElementById("total");
+      totalElement.textContent = "Total: ₱" + total.toFixed(2);
+    }
+
+    function displayReceipt() {
+      var receiptElement = document.getElementById("receipt");
+      receiptElement.innerHTML = "";
+
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var itemText = item.name + " - ₱" + item.price.toFixed(2);
+        var itemElement = document.createElement("p");
+        itemElement.textContent = itemText;
+        receiptElement.appendChild(itemElement);
+      }
+
+      var totalText = "Total: ₱" + total.toFixed(2);
+      var totalElement = document.createElement("p");
+      totalElement.textContent = totalText;
+      receiptElement.appendChild(totalElement);
+    }
+  </script>
+</body>
+</html>
